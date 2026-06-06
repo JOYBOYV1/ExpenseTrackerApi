@@ -12,8 +12,9 @@ export const UsersController = {
 
     async getUserById(req, res, next) {
         try {
-            const Usersid = parseInt(req.params.id);
-            const user = await userServices.getUserById(Usersid);
+            const UserPhoneNumber = req.query.phoneNumber;
+            const UserPassword = req.query.password;
+            const user = await userServices.getUserById(UserPhoneNumber, UserPassword);
             res.status(200).json(user);
 
         } catch (error) {
@@ -34,8 +35,8 @@ export const UsersController = {
     async updateUser(req, res, next) {
         try {
             const id = parseInt(req.params.id);
-            const { name, email, password } = req.body;
-            const result = await userServices.updateUser(id, name, email, password);
+            const { username, email, password, phoneNumber } = req.body;
+            const result = await userServices.updateUser(id, { username, email, password, phoneNumber });
             res.status(200).json(result);
         } catch (error) {
             next(error);

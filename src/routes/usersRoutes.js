@@ -8,9 +8,9 @@ const router = Router();
 
 router.get('/', UsersController.getAllUsers);
 
-router.get('/:id', UsersController.getUserById);
+router.get('/Login', UsersController.getUserById);
 
-router.post('/', validateData(createUserSchema), UsersController.createUser);
+router.post('/Create', validateData(createUserSchema), UsersController.createUser);
 
 router.patch('/:id', validateData(updateUserSchema),UsersController.updateUser);
 

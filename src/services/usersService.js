@@ -7,8 +7,8 @@ export const userServices = {
         return await UserModel.getAllUsers();
     },
 
-    async getUserById(id) {
-        const user = await UserModel.getUserById(id);
+    async getUserById(phoneNumber, password) {
+        const user = await UserModel.getUserById(phoneNumber, password);
         if (!user) {
             throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, 404);
         }
@@ -16,20 +16,29 @@ export const userServices = {
     },
 
     async createUser(userDetails) {
-        const { name, email, password } = userDetails;
+        const { username, email, password, phoneNumber } = userDetails;
 
         const sanitizedUser = {
-            name: name.trim(),
-            email: email.trim().toLowerCase(),
-            password: password.trim(),
+            username: username ? username.trim() : "",
+            email: email ? email.trim().toLowerCase() : "",
+            password: password ? password.trim() : "",
+            phoneNumber: phoneNumber ? phoneNumber.trim() : "",
             createdAt: new Date()
         };
         const NewUser = await UserModel.createUser(sanitizedUser);
         return NewUser;
     },
 
-    async updateUser(id, name, email, password) {
-        const user = await UserModel.updateUser(id, name, email, password);
+    async updateUser(id, userDetails) {
+        const { username, email, password, phoneNumber } = userDetails;
+        
+        const updates = {};
+        if (username !== undefined) updates.username = username.trim();
+        if (email !== undefined) updates.email = email.trim().toLowerCase();
+        if (password !== undefined) updates.password = password.trim();
+        if (phoneNumber !== undefined) updates.phoneNumber = phoneNumber.trim();
+
+        const user = await UserModel.updateUser(id, updates);
         if (!user) {
             throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, 404);
         }
@@ -39,14 +48,14 @@ export const userServices = {
     async deleteUser(id) {
         const AuthorizedUser = 1;
 
-        const userExit = await UserModel.getUserById(id);
+        // const userExit = await UserModel.getUserById(id);
 
-        if (!userExit) {
-            throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, 404);
-        }
-        if (userExit !== AuthorizedUser) {
-            throw new CustomError(ERROR_MESSAGES.UNAUTHORIZED, 401);
-        }
+        // if (!userExit) {
+        //     throw new CustomError(ERROR_MESSAGES.USER_NOT_FOUND, 404);
+        // }
+        // if (userExit !== AuthorizedUser) {
+        //     throw new CustomError(ERROR_MESSAGES.UNAUTHORIZED, 401);
+        // }
 
         const user = await UserModel.deleteUser(id);
 

@@ -1,10 +1,12 @@
 import express from 'express';  // import express.js
+import cors from 'cors'; // import cors
 import usersRoutes from './routes/usersRoutes.js'; // import the user routes
 import errorHandlerMiddleware from './middlewares/errorHandlerMiddleware.js'; // import the error handling middleware
 
 const app = express(); // create an express apllication instance
 const port = process.env.PORT || 3000; // set the port to the value of the PORT environment variable or default to 3000
 
+app.use(cors()); // enable CORS for all requests
 app.use(express.json()); // use the express.json() middleware to parse JSON request bodies
 app.use('/user', usersRoutes); // use the user routes for any requests to "/users"
 
